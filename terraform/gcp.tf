@@ -5,14 +5,8 @@ provider "google-beta" {
 
 data "google_service_account" "default" {
   provider = google-beta
-  account_id = "istio-on-gke"
+  account_id = var.gcp_service_account_id
 }
-
-# gcloud beta container clusters create $CLUSTER_NAME \
-#    --zone $CLUSTER_ZONE --num-nodes 4 \
-#    --machine-type "e2-standard-2" --image-type "COS" \
-#    --cluster-version=$CLUSTER_VERSION --enable-ip-alias \
-#    --addons=Istio --istio-config=auth=MTLS_STRICT
 
 resource "google_container_cluster" "default" {
   provider = google-beta
