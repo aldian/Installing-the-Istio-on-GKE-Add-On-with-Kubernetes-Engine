@@ -1,0 +1,93 @@
+name: Build and Deploy to Istio GKE
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  ISTIO_VERSION: 1.4.6
+
+jobs:
+  setup-build-publish-deploy:
+    name: Setup, Build, Publish, and Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set ENV
+        run: |-
+          echo "ENV=staging" >> $GITHUB_ENV
+          echo "GCS_BUCKET=${{ secrets.GCS_BUCKET }}" >> $GITHUB_ENV
+          echo "GCS_PATH_PREFIX=${{ secrets.GCS_PATH_PREFIX }}" >> $GITHUB_ENV
+          echo "GCP_CLUSTER_NAME=${{ secrets.GCP_CLUSTER_NAME }}" >> $GITHUB_ENV
+          echo "GCP_CLUSTER_ZONE=${{ secrets.GCP_CLUSTER_ZONE }}" >> $GITHUB_ENV
+          echo "GCP_CLUSTER_VERSION=${{ secrets.GCP_CLUSTER_VERSION }}" >> $GITHUB_ENV
+          echo "GCP_CLUSTER_NUM_NODES=${{ secrets.GCP_CLUSTER_NUM_NODES }}" >> $GITHUB_ENV
+          echo "GCP_PROJECT_ID=${{ secrets.GCP_PROJECT_ID }}" >> $GITHUB_ENV
+          echo "GCP_VM_MACHINE_TYPE=${{ secrets.GCP_VM_MACHINE_TYPE }}" >> $GITHUB_ENV
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - uses: 'google-github-actions/auth@v0'
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v0'
+
+      - name: 'Use gcloud CLI'
+        run: 'gcloud info'
+
+      - name: 'Initialize Terraform'
+        run: 'make terraform-init'
+
+      - name: 'Apply Terraform'
+        run: 'make terraform-apply'
+
+      - name: 'Get Cluster Credentials'
+        run: 'make get-cluster-credentials'
+
+      - name: 'Check Cluster'
+        run: 'make check-cluster'
+
+      - name: 'Check Istio Services'
+        run: 'make check-istio-services'
+
+      - name: 'Check Istio Pods'
+        run: 'make check-istio-pods'
+
+      - name: 'Install Istio'
+        run: 'make install-istio'
+
+      - name: 'Display Bookinfo Original YAML'
+        run: 'make display-bookinfo-original-yaml'
+
+      - name: 'Update Bookinfo YAML'
+        run: 'make update-bookinfo-yaml'
+
+      - name: 'Deploy Bookinfo Backends'
+        run: 'make deploy-bookinfo-backends'
+
+      - name: 'Display Bookinfo Gateway Original YAML'
+        run: 'make display-bookinfo-gateway-original-yaml'
+
+      - name: 'Deploy Bookinfo Gateway'
+        run: 'make deploy-bookinfo-gateway'
+
+      - name: 'Get Services'
+        run: 'make get-services'
+
+      - name: 'Get Pods'
+        run: 'make get-pods'
+
+      - name: 'Access Products from Ratings'
+        run: 'make access-products-from-ratings'
+
+      - name: 'Get Gateway'
+        run: 'make get-gateway'
+
+      - name: 'Get External IP'
+        run: 'make get-external-ip'
+
+      - name: 'Access External IP'
+        run: 'make access-external-ip'
