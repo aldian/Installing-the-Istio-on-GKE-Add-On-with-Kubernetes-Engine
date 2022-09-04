@@ -73,6 +73,7 @@ terraform-apply: check-env
 		terraform workspace select $(ENV) && \
 		terraform apply -auto-approve \
 		-var="gcp_project_id=$(GCP_PROJECT_ID)" \
+		-var="gcp_service_account_id=$(GCP_SERVICE_ACCOUNT_ID)" \
 		-var="gcp_vm_machine_type=$(GCP_VM_MACHINE_TYPE)" \
 		-var="gcp_cluster_name=$(GCP_CLUSTER_NAME)" \
 		-var="gcp_cluster_zone=$(GCP_CLUSTER_ZONE)" \
@@ -84,6 +85,7 @@ terraform-destroy: check-env
 		terraform workspace select $(ENV) && \
 		terraform destroy -auto-approve -lock=false \
 		-var="gcp_project_id=$(GCP_PROJECT_ID)" \
+		-var="gcp_service_account_id=$(GCP_SERVICE_ACCOUNT_ID)" \
 		-var="gcp_vm_machine_type=$(GCP_VM_MACHINE_TYPE)" \
 		-var="gcp_cluster_name=$(GCP_CLUSTER_NAME)" \
 		-var="gcp_cluster_zone=$(GCP_CLUSTER_ZONE)" \

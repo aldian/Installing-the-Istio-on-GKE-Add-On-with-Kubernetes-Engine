@@ -25,6 +25,7 @@ jobs:
           echo "GCP_CLUSTER_NUM_NODES=${{ secrets.GCP_CLUSTER_NUM_NODES }}" >> $GITHUB_ENV
           echo "GCP_PROJECT_ID=${{ secrets.GCP_PROJECT_ID }}" >> $GITHUB_ENV
           echo "GCP_VM_MACHINE_TYPE=${{ secrets.GCP_VM_MACHINE_TYPE }}" >> $GITHUB_ENV
+          echo "GCP_SERVICE_ACCOUNT_ID=${{ secrets.GCP_SERVICE_ACCOUNT_ID }}" >> $GITHUB_ENV
       - name: Checkout
         uses: actions/checkout@v2
 

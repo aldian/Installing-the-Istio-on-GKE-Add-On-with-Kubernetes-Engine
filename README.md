@@ -62,7 +62,7 @@ You need to install `gcloud` and `terraform` command line tools.
 
 Once you have installed the CLI tools, login to GCP using the service account JSON:
 ```
-gcloud activate-service-account --key-file <THE SERVICE ACCOUNT JSON FILE>
+gcloud auth activate-service-account --key-file <THE SERVICE ACCOUNT JSON FILE>
 ```
 
 Initialize Terraform:

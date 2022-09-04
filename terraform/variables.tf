@@ -2,6 +2,10 @@ variable "gcp_project_id" {
   type = string
 }
 
+variable "gcp_service_account_id" {
+  type = string
+}
+
 variable "gcp_vm_machine_type" {
   type = string
 }
